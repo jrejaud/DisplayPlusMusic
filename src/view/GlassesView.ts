@@ -203,7 +203,7 @@ function buildContainerConfig(
             new TextContainerProperty({
                 xPosition: showPlaybackButtons ? 234 : 155,
                 yPosition: 12,
-                width: showPlaybackButtons ? MAX_WIDTH - 232 : MAX_WIDTH - 153,
+                width: showPlaybackButtons ? MAX_WIDTH - 234 : MAX_WIDTH - 155,
                 height: 132,
                 borderRadius: 12,
                 borderWidth: 1,
@@ -265,6 +265,11 @@ async function sendImageAsync(song: Song, isMiniMode: boolean): Promise<void> {
     }
 }
 
+/** Dev gallery only: draw through a supplied (traced) bridge instead of the global one. */
+export function setViewBridge(b: EvenAppBridge): void {
+    bridge = b;
+}
+
 export async function createView(song: Song): Promise<void> {
     if (isUpdating) return;
     isUpdating = true;
@@ -307,7 +312,7 @@ export async function createView(song: Song): Promise<void> {
                 return paddedMarquee + metadataPart;
               })()
             : (() => {
-                const infoWidth = (showPlaybackButtons ? MAX_WIDTH - 232 : MAX_WIDTH - 153) - 32;
+                const infoWidth = (showPlaybackButtons ? MAX_WIDTH - 234 : MAX_WIDTH - 155) - 32;
                 const phase = Date.now() % phase_timing;
                 
                 const maxLength = Math.max(song.title.length, song.artist.length, song.album.length);

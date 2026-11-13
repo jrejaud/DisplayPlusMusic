@@ -11,6 +11,17 @@ async function main() {
     // enableMobileConsole();
     console.log("App starting...");
 
+    // Simulator gallery for the lens UI gate. DEV is statically false in production builds,
+    // so neither the gallery nor its fixtures ship in the .ehpk.
+    if (import.meta.env.DEV && new URLSearchParams(location.search).has('lensGate')) {
+        const [{ startLensGateGallery }, { waitForEvenAppBridge }] = await Promise.all([
+            import('./dev/lens-gate-app'),
+            import('@evenrealities/even_hub_sdk'),
+        ]);
+        await startLensGateGallery(await waitForEvenAppBridge());
+        return;
+    }
+
     await seedDevConfig();
 
     viewPresenter.initListeners();
