@@ -1,14 +1,14 @@
 {
-  "package_id": "com.oliemanq.displayplusmusic",
+  "package_id": "space.alastor.jellyfinmusic",
   "edition": "202601",
-  "name": "DisplayPlus Music",
-  "author": "oliemanq",
-  "version": "3.1.0",
+  "name": "Jellyfin Music",
+  "author": "jrejaud",
+  "version": "3.1.1",
   "min_app_version": "2.2.10",
   "min_sdk_version": "0.0.16",
   "entrypoint": "index.html",
-  "tagline": "Music player for Even Hub",
-  "description": "Media player for the Even Hub, displays progress and lyrics from multiple sources across devices.",
+  "tagline": "Jellyfin now-playing and transport control",
+  "description": "Shows what Jellyfin is playing on the glasses — album art, progress and synced lyrics — and drives play/pause, next and previous on the selected Jellyfin player. Fork of DisplayPlus Music by Oliemanq.",
   "permissions": [
     {
       "name": "network",
@@ -27,6 +27,7 @@
         "https://api.spotify.com/v1/me/player/previous",
         "https://i.scdn.co",
         "https://lrclib.net/api/get",
+        "https://media.alastor.space",
         "https://ko-fi.com/oliemanq"
       ]
     }
