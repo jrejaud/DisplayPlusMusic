@@ -289,7 +289,7 @@ export async function createView(song: Song): Promise<void> {
         const showPlaybackButtons = spotifyPresenter.supportsPlaybackControl();
         // Button visibility is per player, so it is part of the layout key: switching between
         // a controllable and a non-controllable player must rebuild the page.
-        const layoutKey = showPlaybackButtons ? `${activeSource}:buttons` : activeSource;
+        const layoutKey = showPlaybackButtons && !isMiniMode ? `${activeSource}:buttons` : activeSource;
         const songInfoID = isMiniMode ? 10 : 3;
         const lyricsID = isMiniMode ? 11 : 4;
         const phase_timing = 25000; // 25 seconds for a full marquee cycle

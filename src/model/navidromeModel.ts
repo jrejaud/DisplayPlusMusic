@@ -154,8 +154,13 @@ class NavidromeModel {
       this.playbackClients = entries.map(toClientSummary);
 
       if (entries.length === 0) {
-        this.selectedCanControl = false;
-        this.selectedSessionId = '';
+        // Keep the last player's controls while its song is still shown: a paused
+        // session can briefly drop out of getNowPlaying, and "play" is exactly what
+        // the user wants then.
+        if (this.currentSong.songID === '0') {
+          this.selectedCanControl = false;
+          this.selectedSessionId = '';
+        }
         if (this.currentSong.songID !== '0') {
           this.currentSong.addisPlaying(false);
         }
@@ -270,13 +275,14 @@ class NavidromeModel {
       console.log(`[Navidrome] ${command} ignored — the selected player is not remote-controllable.`);
       return;
     }
+    // Control calls are queued one after another, so a request that never answers
+    // must not block every later button press.
+    const abort = new AbortController();
+    const timer = setTimeout(() => abort.abort(), 5000);
     try {
-      const params = new URLSearchParams({
-        u: this.username,
-        p: this.password,
-        session: this.selectedSessionId,
-      });
-      const response = await fetch(`${this.baseUrl}/control/${command}?${params.toString()}`);
+      const params = await this.authQueryParams();
+      params.set('session', this.selectedSessionId);
+      const response = await fetch(`${this.baseUrl}/control/${command}?${params.toString()}`, { signal: abort.signal });
       const body = await response.json().catch(() => null);
       if (!response.ok || !body?.ok) {
         console.error(`[Navidrome] ${command} failed: ${body?.error ?? response.status}`);
@@ -287,6 +293,8 @@ class NavidromeModel {
       if (command === 'play') this.currentSong.addisPlaying(true);
     } catch (error) {
       console.error(`[Navidrome] ${command} failed:`, error);
+    } finally {
+      clearTimeout(timer);
     }
   }
 
