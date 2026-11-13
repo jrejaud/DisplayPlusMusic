@@ -5,10 +5,13 @@ import { fetchLyrics } from './model/lyricsModel';
 import pollingPresenter from './presenter/pollingPresenter';
 import viewPresenter from './presenter/viewPresenter';
 import playbackOffsetModel from './model/playbackOffsetModel';
+import { seedDevConfig } from './utils/devSeed';
 
 async function main() {
     // enableMobileConsole();
     console.log("App starting...");
+
+    await seedDevConfig();
 
     viewPresenter.initListeners();
 
